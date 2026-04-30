@@ -1,71 +1,116 @@
-# ShowPulse
+# EventIQ: Real-Time Event Analytics Platform
 
-## Description
-A data pipeline with Kafka, Spark Streaming, dbt, Docker, Airflow, and GCP!
+A scalable, cloud-native data engineering platform that ingests, processes, and analyzes real-time event data using modern distributed systems.
 
+## Overview
 
-### Objective
+This project leverages the Ticketmaster API to build an end-to-end **event analytics pipeline** that collects, processes, and visualizes data about live events (concerts, sports, etc.) across cities.
 
-This project uses the Ticketmaster API to collect, transform and then visualize information on events happening in a given city in real time! The data is pre-processed & appended to a BigQuery data warehouse and then a batch job further processes the data and turns it into the desired tables for my dashboard. Using this dashboard, we will be able to show upcoming events in cities, compare the different segments of events happening in cities, and find good deals on far-out events. 
+The platform combines **real-time streaming** with **batch processing** to generate insights such as event trends, category distribution, and pricing opportunities.
 
+## Architecture
 
-### Dataset
+```id="arch_event"
+Ticketmaster API → Kafka → Spark Streaming → Data Lake (GCS)
+                                          ↓
+                                     Airflow
+                                          ↓
+                                        dbt
+                                          ↓
+                                   BigQuery (Warehouse)
+                                          ↓
+                                   Dashboard / Insights
+```
 
-[Ticketmaster](https://developer.ticketmaster.com/) is an API that fetches data about to events (concerts, sporting events, etc) going on around the world. I figured ticketmaster would have most large events, and we could use this data to know when tickets for a show are being released and be the first to get them.
+## Workflow
 
+1. Event data is fetched from Ticketmaster API
+2. Data is streamed into Kafka topics
+3. Spark Streaming processes and cleans the data
+4. Processed data is stored in Google Cloud Storage
+5. Airflow orchestrates batch workflows
+6. dbt transforms raw data into analytical models
+7. Data is loaded into BigQuery for querying
+8. Dashboards provide insights on events and trends
 
-### Tools & Technologies
+## Tech Stack
 
-- Cloud - [**Google Cloud Platform**](https://cloud.google.com)
-- Infrastructure as Code software - [**Terraform**](https://www.terraform.io)
-- Containerization - [**Docker**](https://www.docker.com), [**Docker Compose**](https://docs.docker.com/compose/)
-- Stream Processing - [**Kafka**](https://kafka.apache.org), [**Spark Streaming**](https://spark.apache.org/docs/latest/streaming-programming-guide.html)
-- Orchestration - [**Airflow**](https://airflow.apache.org)
-- Transformation - [**dbt**](https://www.getdbt.com)
-- Data Lake - [**Google Cloud Storage**](https://cloud.google.com/storage)
-- Data Warehouse - [**BigQuery**](https://cloud.google.com/bigquery)
-- Data Visualization - [**Tableau**](https://www.tableau.com/)
-- Language - [**Python**](https://www.python.org)
+* **Language:** Python
+* **Streaming:** Apache Kafka
+* **Processing:** Apache Spark (PySpark)
+* **Orchestration:** Apache Airflow
+* **Transformation:** dbt
+* **Cloud:** Google Cloud Platform
+* **Data Lake:** Google Cloud Storage
+* **Data Warehouse:** BigQuery
+* **Infrastructure:** Terraform
+* **Containerization:** Docker
 
-### Architecture
+## Key Features
 
-![show pulse architecture](images/ShowPulse_Architecture.jpg)
+* Real-time event data ingestion and processing
+* Hybrid pipeline (streaming + batch)
+* Scalable cloud-based architecture
+* Modular data transformation using dbt
+* Automated workflow orchestration with Airflow
+* Infrastructure as Code using Terraform
+* Fully containerized deployment
 
-### Final Result
+## Use Cases
 
-![show pulse dashboard](images/Showpulse_Dashboard.png)
+* Event trend analysis across cities
+* Category-based insights (music, sports, etc.)
+* Price comparison and deal identification
+* Real-time event monitoring dashboards
 
-## Setup
+## 🚀 Getting Started
+### Setup infrastructure
 
-**WARNING: You will be charged for all the infrastructure setup. If you sign up for a Google Cloud account you will start with a  $300 credit.**
-### Pre-requisites
+```bash id="cmd_tf"
+terraform init
+terraform apply
+```
 
-If you already have a Google Cloud account and a working terraform setup, you can skip the pre-requisite steps.
+### Run services
 
-- Google Cloud Platform. 
-  - GCP Account and Access Setup
-  - [gcloud alternate installation method - Windows](https://github.com/DataTalksClub/data-engineering-zoomcamp/blob/main/week_1_basics_n_setup/1_terraform_gcp/windows.md#google-cloud-sdk)
-- Terraform
-  - [Setup Terraform](https://github.com/DataTalksClub/data-engineering-zoomcamp/blob/main/week_1_basics_n_setup/1_terraform_gcp/windows.md#terraform)
+```bash id="cmd_docker"
+docker-compose up --build
+```
 
+### Execute pipeline
 
-### Get Going!
+* Start Kafka producers
+* Run Spark streaming jobs
+* Trigger Airflow DAGs
 
-- Set up infrastructure in GCP, including storage buckets, and bigquery.
-- Install dependencies needed to run Spark and Kafka
-- Run Startup Scripts
+## Project Structure
 
+```id="struct_event"
+├── airflow/           # DAGs for orchestration
+├── kafka/             # Event streaming setup
+├── spark/             # Streaming jobs
+├── dbt/               # Data transformation models
+├── terraform/         # Cloud infrastructure
+├── scripts/           # Data ingestion scripts
+└── README.md
+```
 
-### How can I make this better?!
-- Add more data about the artist/attraction (like Spotify plays per month, avg ticket price) and then call out great deals
-- Choose managed infrastructure like Cloud Composer for Airflow, Dataproc for Spark and Confluent Cloud for Kafka
-- Optimize the Kafka, Spark & dbt streaming setup 
-- Build dimensions and facts incrementally instead of full refresh
-- Create more dimensional models
-- Include CI/CD
-- Include Terraform and the infrastructure setup
-- Add more visualizations
-- Add more instructions to this repo
+## Future Enhancements
 
-### Special Mentions
-I learned this all thanks to [DataTalks.Club](https://datatalks.club)!! Thank you so much for offering this Data Engineering course for completely free. All the things I learned there, enabled me to come up with this project. I had little to no experience with most of these technologies before, and it really helped me gain a better understanding. If you want to upskill on Data Engineering technologies, please check out the [course](https://github.com/DataTalksClub/data-engineering-zoomcamp)!
+* Incremental data ingestion
+* Data quality checks (Great Expectations)
+* Monitoring (Prometheus + Grafana)
+* Multi-region cloud deployment
+* Role-based access control
+
+## Key Learnings
+
+* Building scalable real-time data pipelines
+* Integrating streaming and batch architectures
+* Working with cloud-native data platforms
+* Implementing Infrastructure as Code
+* Designing analytical data models
+
+## Support
+
+If you found this project useful, consider giving it a star
